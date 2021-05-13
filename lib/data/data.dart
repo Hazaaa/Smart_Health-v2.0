@@ -7,22 +7,22 @@ class Data {
   static final categoriesList = [
     Category(
       title: "Pedijatrija",
-      doctorsNumber: 8,
+      doctorsNumber: 10,
       icon: LineIcons.child,
     ),
     Category(
       title: "Dermatologija",
-      doctorsNumber: 7,
+      doctorsNumber: 4,
       icon: Icons.line_style,
     ),
     Category(
       title: "Oftamologija",
-      doctorsNumber: 10,
+      doctorsNumber: 5,
       icon: LineIcons.eye,
     ),
     Category(
       title: "Kardiologija",
-      doctorsNumber: 15,
+      doctorsNumber: 2,
       icon: Icons.favorite,
     ),
   ];
