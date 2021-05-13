@@ -22,7 +22,7 @@ class Data {
     ),
     Category(
       title: "Kardiologija",
-      doctorsNumber: 2,
+      doctorsNumber: 1,
       icon: Icons.favorite,
     ),
   ];
