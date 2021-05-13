@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../constants.dart';
 import '../size_confige.dart';
@@ -7,6 +8,10 @@ class DoctorBanner extends StatelessWidget {
   const DoctorBanner({
     Key key,
   }) : super(key: key);
+
+  void _launchURL(String url) async {
+    await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,17 +101,23 @@ class DoctorBanner extends StatelessWidget {
                                     ),
                                   ),
                                   SizedBox(width: getRelativeWidth(0.03)),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.white.withOpacity(0.2),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    padding:
-                                        EdgeInsets.all(getRelativeWidth(0.012)),
-                                    child: Icon(
-                                      Icons.arrow_forward_ios,
-                                      color: Colors.white,
-                                      size: getRelativeWidth(0.038),
+                                  GestureDetector(
+                                    onTap: () {
+                                      String url = 'https://covid19.rs/';
+                                      _launchURL(url);
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white.withOpacity(0.2),
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      padding: EdgeInsets.all(
+                                          getRelativeWidth(0.012)),
+                                      child: Icon(
+                                        Icons.arrow_forward_ios,
+                                        color: Colors.white,
+                                        size: getRelativeWidth(0.038),
+                                      ),
                                     ),
                                   )
                                 ],
