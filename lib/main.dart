@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Doctor App',
+      title: 'Smart Health',
       theme: ThemeData(
         fontFamily: "Nunito",
         primarySwatch: Colors.blue,

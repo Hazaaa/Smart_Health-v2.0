@@ -13,8 +13,8 @@ class DoctorBanner extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          width: getRelativeWidth(0.94),
-          height: getRelativeHeight(0.22),
+          width: getRelativeWidth(0.92),
+          height: getRelativeHeight(0.20),
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -77,7 +77,7 @@ class DoctorBanner extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Check Up COVID-19",
+                                "COVID-19",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -89,7 +89,7 @@ class DoctorBanner extends StatelessWidget {
                                 children: [
                                   Flexible(
                                     child: Text(
-                                      "Contains several list of questions to check your physical condition.",
+                                      "Proveri trenutno stanje COVID-19 situacije.",
                                       style: TextStyle(
                                           color: Colors.white.withOpacity(0.85),
                                           fontSize: getRelativeWidth(0.033)),

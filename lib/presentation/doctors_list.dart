@@ -6,11 +6,14 @@ import 'package:smart_health_v2/data/data.dart';
 import '../constants.dart';
 import '../size_confige.dart';
 
-class DoctorsList extends StatelessWidget {
-  const DoctorsList({
-    Key key,
-  }) : super(key: key);
+class DoctorsList extends StatefulWidget {
+  const DoctorsList({Key key}) : super(key: key);
 
+  @override
+  _DoctorsListState createState() => _DoctorsListState();
+}
+
+class _DoctorsListState extends State<DoctorsList> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -99,12 +102,12 @@ class DoctorsList extends StatelessWidget {
                             ),
                             Container(
                                 width: cardWidth,
-                                height: getRelativeHeight(0.19),
+                                height: getRelativeHeight(0.20),
                                 child: Image.asset(doctor.image)),
                           ],
                         ),
                         Container(
-                          height: getRelativeHeight(0.12),
+                          height: getRelativeHeight(0.135),
                           width: double.infinity,
                           decoration: BoxDecoration(
                               color: Colors.white,

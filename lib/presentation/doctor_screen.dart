@@ -15,6 +15,7 @@ class DoctorScreen extends StatefulWidget {
 
 class _DoctorScreenState extends State<DoctorScreen> {
   int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,11 +24,11 @@ class _DoctorScreenState extends State<DoctorScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: getRelativeHeight(0.025)),
+              SizedBox(height: getRelativeHeight(0.015)),
               DoctorAppBar(),
               SizedBox(height: getRelativeHeight(0.015)),
               DoctorBanner(),
-              SizedBox(height: getRelativeHeight(0.005)),
+              SizedBox(height: getRelativeHeight(0.012)),
               SearchField(),
               SizedBox(height: getRelativeHeight(0.025)),
               CategoriesList(),

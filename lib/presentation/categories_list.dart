@@ -49,7 +49,7 @@ class CategoriesList extends StatelessWidget {
                             child: Icon(
                               category.icon,
                               color: Colors.white,
-                              size: getRelativeWidth(0.075),
+                              size: getRelativeWidth(0.050),
                             )),
                         SizedBox(width: getRelativeWidth(0.02)),
                         Column(
@@ -64,7 +64,7 @@ class CategoriesList extends StatelessWidget {
                             ),
                             SizedBox(height: getRelativeHeight(0.005)),
                             Text(
-                              category.doctorsNumber.toString() + " doctors",
+                              category.doctorsNumber > 1 ? category.doctorsNumber.toString() + " doktora" : category.doctorsNumber.toString() + " doktor" ,
                               style: TextStyle(
                                   color: Colors.black.withOpacity(0.48),
                                   fontSize: getRelativeWidth(0.03)),

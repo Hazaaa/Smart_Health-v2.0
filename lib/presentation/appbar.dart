@@ -18,18 +18,11 @@ class DoctorAppBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Hi, Hosain",
+                "Zdravo, Stefan",
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w800,
                     fontSize: getRelativeWidth(0.09)),
-              ),
-              SizedBox(height: getRelativeHeight(0.003)),
-              Text(
-                "Find A Doctor & Specialist easily",
-                style: TextStyle(
-                    color: Colors.blueGrey[400],
-                    fontSize: getRelativeWidth(0.036)),
               ),
             ],
           ),
