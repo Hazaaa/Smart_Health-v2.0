@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smart_health_v2/data/data.dart';
 
-import '../constants.dart';
-import '../size_confige.dart';
+import '../../constants/constants.dart';
+import '../../constants/size_confige.dart';
 
 class CategoriesList extends StatelessWidget {
   const CategoriesList({
@@ -64,7 +64,11 @@ class CategoriesList extends StatelessWidget {
                             ),
                             SizedBox(height: getRelativeHeight(0.005)),
                             Text(
-                              category.doctorsNumber > 1 ? category.doctorsNumber.toString() + " doktora" : category.doctorsNumber.toString() + " doktor" ,
+                              category.doctorsNumber > 1
+                                  ? category.doctorsNumber.toString() +
+                                      " doktora"
+                                  : category.doctorsNumber.toString() +
+                                      " doktor",
                               style: TextStyle(
                                   color: Colors.black.withOpacity(0.48),
                                   fontSize: getRelativeWidth(0.03)),

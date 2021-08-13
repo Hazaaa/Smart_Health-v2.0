@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:smart_health_v2/presentation/doctor_screen.dart';
-import 'package:smart_health_v2/size_confige.dart';
+import 'package:smart_health_v2/presentation/screens/login_screen.dart';
+import 'package:smart_health_v2/constants/size_confige.dart';
+import 'package:smart_health_v2/routes/router.dart' as router;
 
 void main() {
   runApp(MyApp());
@@ -17,9 +18,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      onGenerateRoute: router.generateRoute,
       home: Builder(builder: (context) {
         SizeConfig.initSize(context);
-        return DoctorScreen();
+        return LoginScreen();
       }),
     );
   }

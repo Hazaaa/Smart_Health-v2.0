@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-import '../size_confige.dart';
+import '../../constants/constants.dart';
+import '../../constants/size_confige.dart';
 import 'dart:math' as math;
 
 class BottomNavigation extends StatelessWidget {

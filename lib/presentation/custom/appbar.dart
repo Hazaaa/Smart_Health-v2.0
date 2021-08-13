@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../size_confige.dart';
+import '../../constants/size_confige.dart';
 
 class DoctorAppBar extends StatelessWidget {
   const DoctorAppBar({

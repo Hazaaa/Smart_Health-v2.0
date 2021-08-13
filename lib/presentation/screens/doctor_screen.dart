@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:smart_health_v2/constants.dart';
-import 'package:smart_health_v2/presentation/banner.dart';
-import 'package:smart_health_v2/presentation/bottom_navigation_bar.dart';
-import 'package:smart_health_v2/presentation/doctors_list.dart';
-import 'package:smart_health_v2/presentation/search_field.dart';
-import 'package:smart_health_v2/size_confige.dart';
-import 'appbar.dart';
-import 'categories_list.dart';
+import 'package:smart_health_v2/constants/constants.dart';
+import 'package:smart_health_v2/presentation/specific/banner.dart';
+import 'package:smart_health_v2/presentation/custom/bottom_navigation_bar.dart';
+import 'package:smart_health_v2/presentation/specific/doctors_list.dart';
+import 'package:smart_health_v2/presentation/common/search_field.dart';
+import 'package:smart_health_v2/constants/size_confige.dart';
+import '../custom/appbar.dart';
+import '../specific/categories_list.dart';
 
 class DoctorScreen extends StatefulWidget {
   @override

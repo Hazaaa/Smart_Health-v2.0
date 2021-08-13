@@ -46,6 +46,5 @@ class Data {
         image: "assets/images/doctor_3.png",
         reviews: 19,
         reviewScore: 3),
-   
   ];
 }

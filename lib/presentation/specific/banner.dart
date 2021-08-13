@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../constants.dart';
-import '../size_confige.dart';
+import '../../constants/constants.dart';
+import '../../constants/size_confige.dart';
 
 class DoctorBanner extends StatelessWidget {
   const DoctorBanner({

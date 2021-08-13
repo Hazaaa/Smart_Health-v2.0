@@ -3,8 +3,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:smart_health_v2/data/data.dart';
 
-import '../constants.dart';
-import '../size_confige.dart';
+import '../../constants/constants.dart';
+import '../../constants/size_confige.dart';
 
 class DoctorsList extends StatefulWidget {
   const DoctorsList({Key key}) : super(key: key);

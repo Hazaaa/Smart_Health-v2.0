@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 
-import '../size_confige.dart';
+import '../../constants/size_confige.dart';
 
 class SearchField extends StatelessWidget {
   SearchField({Key key}) : super(key: key);
