@@ -6,7 +6,7 @@ import '../../constants/size_confige.dart';
 
 class DoctorBanner extends StatelessWidget {
   const DoctorBanner({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   void _launchURL(String url) async {

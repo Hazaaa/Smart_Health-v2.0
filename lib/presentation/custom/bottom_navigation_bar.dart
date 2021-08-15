@@ -10,11 +10,11 @@ class BottomNavigation extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemPressed;
   const BottomNavigation({
-    Key key,
-    @required this.itemIcons,
-    @required this.centerIcon,
-    @required this.selectedIndex,
-    @required this.onItemPressed,
+    Key? key,
+    required this.itemIcons,
+    required this.centerIcon,
+    required this.selectedIndex,
+    required this.onItemPressed,
   }) : assert(itemIcons.length != 3, "Item must equal 4");
 
   @override

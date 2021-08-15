@@ -6,7 +6,7 @@ import '../../constants/size_confige.dart';
 
 class CategoriesList extends StatelessWidget {
   const CategoriesList({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

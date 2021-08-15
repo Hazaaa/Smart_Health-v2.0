@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../constants/size_confige.dart';
 
 class SearchField extends StatelessWidget {
-  SearchField({Key key}) : super(key: key);
+  SearchField({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class SearchField extends StatelessWidget {
                 color: Colors.blueGrey.withOpacity(0.9),
               ),
               prefixIcon: Icon(
-                LineIcons.search,
+                FontAwesomeIcons.search,
                 color: Colors.blueGrey.withOpacity(0.9),
                 size: getRelativeWidth(0.065),
               ),

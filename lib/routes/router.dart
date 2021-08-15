@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_health_v2/presentation/screens/doctor_screen.dart';
 import 'package:smart_health_v2/presentation/screens/login_screen.dart';
+import 'package:smart_health_v2/presentation/screens/start_wrapper_screen.dart';
 import 'package:smart_health_v2/routes/routes_constants.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -10,6 +11,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case LoginRoute:
       return MaterialPageRoute(builder: (context) => LoginScreen());
     default:
-      return MaterialPageRoute(builder: (context) => LoginScreen());
+      return MaterialPageRoute(builder: (context) => StartWrapperScreen());
   }
 }

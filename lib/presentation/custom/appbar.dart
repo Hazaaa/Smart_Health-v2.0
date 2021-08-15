@@ -4,7 +4,7 @@ import '../../constants/size_confige.dart';
 
 class DoctorAppBar extends StatelessWidget {
   const DoctorAppBar({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

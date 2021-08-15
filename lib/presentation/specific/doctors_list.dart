@@ -7,7 +7,7 @@ import '../../constants/constants.dart';
 import '../../constants/size_confige.dart';
 
 class DoctorsList extends StatefulWidget {
-  const DoctorsList({Key key}) : super(key: key);
+  const DoctorsList({Key? key}) : super(key: key);
 
   @override
   _DoctorsListState createState() => _DoctorsListState();

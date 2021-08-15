@@ -3,7 +3,7 @@ import 'package:gradient_widgets/gradient_widgets.dart';
 import 'package:smart_health_v2/constants/constants.dart';
 
 class SmartHealthLogo extends StatelessWidget {
-  const SmartHealthLogo({Key key}) : super(key: key);
+  const SmartHealthLogo({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

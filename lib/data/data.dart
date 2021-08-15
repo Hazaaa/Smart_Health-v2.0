@@ -1,14 +1,14 @@
-import 'package:line_icons/line_icons.dart';
-import 'package:smart_health_v2/model/category.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:smart_health_v2/models/category.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_health_v2/model/doctor.dart';
+import 'package:smart_health_v2/models/doctor.dart';
 
 class Data {
   static final categoriesList = [
     Category(
       title: "Pedijatrija",
       doctorsNumber: 10,
-      icon: LineIcons.child,
+      icon: FontAwesomeIcons.baby,
     ),
     Category(
       title: "Dermatologija",
@@ -18,7 +18,7 @@ class Data {
     Category(
       title: "Oftamologija",
       doctorsNumber: 5,
-      icon: LineIcons.eye,
+      icon: FontAwesomeIcons.eye,
     ),
     Category(
       title: "Kardiologija",

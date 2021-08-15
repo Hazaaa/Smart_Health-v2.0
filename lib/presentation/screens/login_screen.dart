@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_health_v2/constants/constants.dart';
+import 'package:smart_health_v2/domain/auth/auth_service.dart';
+import 'package:smart_health_v2/domain/auth/models/health_card.dart';
 import 'package:smart_health_v2/presentation/common/logo.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({Key key}) : super(key: key);
+  LoginScreen({Key? key}) : super(key: key);
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -16,6 +19,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController cardNumberController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+    final authService = Provider.of<AuthService>(context, listen: false);
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -25,21 +32,20 @@ class _LoginScreenState extends State<LoginScreen> {
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               SmartHealthLogo(),
-              Container(
-                margin: EdgeInsets.only(top: 30),
-              ),
+              SizedBox(height: 30.0),
               Form(
                 key: _formKey,
                 child: Column(
                   children: [
                     // HEALTH CARD NUMBER
                     Container(
-                      margin: EdgeInsets.all(20),
+                      margin: EdgeInsets.only(left: 20.0, right: 20.0),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(32),
                       ),
                       child: TextFormField(
+                        controller: cardNumberController,
                         textAlign: TextAlign.center,
                         enableSuggestions: true,
                         keyboardType: TextInputType.number,
@@ -65,14 +71,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
 
+                    SizedBox(height: 20.0),
                     // PASSWORD
                     Container(
-                      margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                      margin: EdgeInsets.only(left: 20, right: 20),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(32),
                       ),
                       child: TextFormField(
+                        controller: passwordController,
                         textAlign: TextAlign.center,
                         enableSuggestions: true,
                         obscureText: true,
@@ -96,27 +104,57 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
 
+                    SizedBox(height: 20.0),
                     // SUBMIT BUTTON
                     Container(
                       margin: EdgeInsets.only(left: 50, right: 50),
-                      child: GradientButton(
-                          child: Text("Prijavi se"),
-                          increaseHeightBy: 10,
-                          increaseWidthBy: 10,
-                          gradient: LinearGradient(
-                            colors: [
-                              kPrimarylightColor,
-                              kPrimaryDarkColor,
-                            ],
-                          ),
-                          callback: () {
-                            if (_formKey.currentState.validate()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Podaci se proveravaju...')),
-                              );
-                            }
-                          }),
+                      child: Consumer<AuthService>(
+                          builder: (context, authService, snapshot) {
+                        return GradientButton(
+                            isEnabled: !authService.isSigningInProgress,
+                            child: authService.isSigningInProgress
+                                ? SizedBox(
+                                    width: 25.0,
+                                    height: 25.0,
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.white),
+                                      strokeWidth: 4,
+                                    ),
+                                  )
+                                : Text("Prijavi se"),
+                            increaseHeightBy: 10,
+                            increaseWidthBy: 10,
+                            gradient: LinearGradient(
+                              colors: [
+                                kPrimarylightColor,
+                                kPrimaryDarkColor,
+                              ],
+                            ),
+                            callback: () {
+                              if (_formKey.currentState!.validate()) {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                String cardNumber = cardNumberController.text;
+                                String password = passwordController.text;
+
+                                authService.signInWithCardNumberAndPassword(
+                                    HealthCard(cardNumber, password));
+                              }
+                            });
+                      }),
+                    ),
+
+                    SizedBox(height: 20.0),
+                    // ERROR Messages
+                    Consumer<AuthService>(
+                      builder: (context, authService, child) {
+                        return Visibility(
+                            visible: authService.errorMessage != '',
+                            child: Text(
+                              '${authService.errorMessage}',
+                              style: TextStyle(color: Colors.red),
+                            ));
+                      },
                     )
                   ],
                 ),
