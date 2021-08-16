@@ -35,84 +35,84 @@ class CategoriesList extends StatelessWidget {
                 categories.add(Category.fromJson(element));
               });
 
-              return ListView.builder(
-                itemCount: categories.length,
-                scrollDirection: Axis.horizontal,
-                padding:
-                    EdgeInsets.symmetric(horizontal: getRelativeWidth(0.035)),
-                itemBuilder: (context, index) {
-                  final category = categories[index];
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: getRelativeHeight(0.1),
-                        constraints:
-                            BoxConstraints(minWidth: getRelativeWidth(0.41)),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: getRelativeWidth(0.03)),
-                          child: Row(
-                            children: [
-                              Container(
-                                  padding:
-                                      EdgeInsets.all(getRelativeWidth(0.025)),
-                                  decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                        colors: [
-                                          kCategoriesPrimaryColor[index],
-                                          kCategoriesSecondryColor[index],
-                                        ],
-                                      ),
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Icon(
-                                    category.getIconData(),
-                                    color: Colors.white,
-                                    size: getRelativeWidth(0.050),
-                                  )),
-                              SizedBox(width: getRelativeWidth(0.02)),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    category.name,
-                                    style: TextStyle(
-                                        fontSize: getRelativeWidth(0.038),
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(height: getRelativeHeight(0.005)),
-                                  Text(
-                                    category.numOfDoctors > 1
-                                        ? category.numOfDoctors.toString() +
-                                            " doktora"
-                                        : category.numOfDoctors.toString() +
-                                            " doktor",
-                                    style: TextStyle(
-                                        color: Colors.black.withOpacity(0.48),
-                                        fontSize: getRelativeWidth(0.03)),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: getRelativeWidth(0.04))
-                    ],
-                  );
-                },
-              );
+              return _buildCategoriesListView(context, categories);
             }
 
             return Center(child: UpgradedCircularProgressIndicator());
           },
         ));
+  }
+
+  Widget _buildCategoriesListView(
+      BuildContext context, List<Category> categories) {
+    return ListView.builder(
+      itemCount: categories.length,
+      scrollDirection: Axis.horizontal,
+      padding: EdgeInsets.symmetric(horizontal: getRelativeWidth(0.035)),
+      itemBuilder: (context, index) {
+        final category = categories[index];
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              height: getRelativeHeight(0.1),
+              constraints: BoxConstraints(minWidth: getRelativeWidth(0.41)),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: getRelativeWidth(0.03)),
+                child: Row(
+                  children: [
+                    Container(
+                        padding: EdgeInsets.all(getRelativeWidth(0.025)),
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                kCategoriesPrimaryColor[index],
+                                kCategoriesSecondryColor[index],
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Icon(
+                          category.getIconData(),
+                          color: Colors.white,
+                          size: getRelativeWidth(0.050),
+                        )),
+                    SizedBox(width: getRelativeWidth(0.02)),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          category.name,
+                          style: TextStyle(
+                              fontSize: getRelativeWidth(0.038),
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: getRelativeHeight(0.005)),
+                        Text(
+                          category.numOfDoctors > 1
+                              ? category.numOfDoctors.toString() + " doktora"
+                              : category.numOfDoctors.toString() + " doktor",
+                          style: TextStyle(
+                              color: Colors.black.withOpacity(0.48),
+                              fontSize: getRelativeWidth(0.03)),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(width: getRelativeWidth(0.04))
+          ],
+        );
+      },
+    );
   }
 }
