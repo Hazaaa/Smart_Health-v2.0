@@ -3,9 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_health_v2/constants/constants.dart';
+import 'package:smart_health_v2/constants/size_confige.dart';
 import 'package:smart_health_v2/domain/auth/auth_service.dart';
 import 'package:smart_health_v2/domain/auth/models/health_card.dart';
+import 'package:smart_health_v2/presentation/common/error_text.dart';
 import 'package:smart_health_v2/presentation/common/logo.dart';
+import 'package:smart_health_v2/presentation/custom/circular_progress_indicator.dart';
+import 'package:smart_health_v2/routes/routes_constants.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -21,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final TextEditingController cardNumberController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
+    // ignore: unused_local_variable
     final authService = Provider.of<AuthService>(context, listen: false);
 
     return GestureDetector(
@@ -32,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               SmartHealthLogo(),
-              SizedBox(height: 30.0),
+              SizedBox(height: getRelativeHeight(0.06)),
               Form(
                 key: _formKey,
                 child: Column(
@@ -71,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
 
-                    SizedBox(height: 20.0),
+                    SizedBox(height: getRelativeHeight(0.03)),
                     // PASSWORD
                     Container(
                       margin: EdgeInsets.only(left: 20, right: 20),
@@ -104,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
 
-                    SizedBox(height: 20.0),
+                    SizedBox(height: getRelativeHeight(0.03)),
                     // SUBMIT BUTTON
                     Container(
                       margin: EdgeInsets.only(left: 50, right: 50),
@@ -113,14 +118,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         return GradientButton(
                             isEnabled: !authService.isSigningInProgress,
                             child: authService.isSigningInProgress
-                                ? SizedBox(
-                                    width: 25.0,
-                                    height: 25.0,
-                                    child: CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.white),
-                                      strokeWidth: 4,
-                                    ),
+                                ? UpgradedCircularProgressIndicator(
+                                    color: Colors.white,
                                   )
                                 : Text("Prijavi se"),
                             increaseHeightBy: 10,
@@ -139,21 +138,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                 authService.signInWithCardNumberAndPassword(
                                     HealthCard(cardNumber, password));
+
+                                Navigator.pushReplacementNamed(
+                                    context, HomeRoute);
                               }
                             });
                       }),
                     ),
 
-                    SizedBox(height: 20.0),
+                    SizedBox(height: getRelativeHeight(0.03)),
                     // ERROR Messages
                     Consumer<AuthService>(
                       builder: (context, authService, child) {
                         return Visibility(
                             visible: authService.errorMessage != '',
-                            child: Text(
-                              '${authService.errorMessage}',
-                              style: TextStyle(color: Colors.red),
-                            ));
+                            child: ErrorText('${authService.errorMessage}'));
                       },
                     )
                   ],
