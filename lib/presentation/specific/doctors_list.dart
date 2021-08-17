@@ -154,7 +154,7 @@ class _DoctorsListState extends State<DoctorsList> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                doctor.name,
+                                'Dr. ${doctor.name.split(' ')[0]}',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: kHardTextColor,

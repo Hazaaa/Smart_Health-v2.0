@@ -136,11 +136,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 String cardNumber = cardNumberController.text;
                                 String password = passwordController.text;
 
-                                authService.signInWithCardNumberAndPassword(
-                                    HealthCard(cardNumber, password));
-
-                                Navigator.pushReplacementNamed(
-                                    context, HomeRoute);
+                                authService
+                                    .signInWithCardNumberAndPassword(
+                                        HealthCard(cardNumber, password))
+                                    .then((value) =>
+                                        Navigator.pushReplacementNamed(
+                                            context, HomeRoute));
                               }
                             });
                       }),
