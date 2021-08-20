@@ -11,6 +11,7 @@ class AuthService with ChangeNotifier {
 
   bool get isSigningInProgress => _signinInProgress;
   String get errorMessage => _errorMessage ?? '';
+  auth.FirebaseAuth get firebaseAuthInstance => _firebaseAuth;
 
   User? mapUserFromFirebase(auth.User? user) {
     if (user == null) {
@@ -20,8 +21,8 @@ class AuthService with ChangeNotifier {
     return User(user.uid, user.email);
   }
 
-  Stream<User?>? get user {
-    return _firebaseAuth.authStateChanges().map(mapUserFromFirebase);
+  User? get user {
+    return mapUserFromFirebase(_firebaseAuth.currentUser);
   }
 
   Future<void> signInWithCardNumberAndPassword(

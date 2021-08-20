@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:smart_health_v2/domain/interfaces/collection.dart';
 
-class CategoriesCollection implements Collection {
+class CategoriesCollection {
   late CollectionReference _collection;
 
   CategoriesCollection(FirebaseFirestore firestore) {

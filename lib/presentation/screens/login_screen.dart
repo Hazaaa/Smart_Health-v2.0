@@ -25,8 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final TextEditingController cardNumberController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
-    // ignore: unused_local_variable
-    final authService = Provider.of<AuthService>(context, listen: false);
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -44,70 +42,24 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     // HEALTH CARD NUMBER
                     Container(
-                      margin: EdgeInsets.only(left: 20.0, right: 20.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(32),
-                      ),
-                      child: TextFormField(
-                        controller: cardNumberController,
-                        textAlign: TextAlign.center,
-                        enableSuggestions: true,
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Broj zdravstvene knjižice je obavezan!';
-                          } else if (value.toString().length != 11) {
-                            return 'Broj zdravstvene knjižice sadrzi 11 cifara!';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.credit_card,
-                            color: Colors.grey,
-                          ),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.only(
-                              left: 15, bottom: 11, top: 11, right: 15),
-                          labelText: "Broj zdravstvene knjižice",
-                          labelStyle: TextStyle(color: Colors.grey),
+                        margin: EdgeInsets.only(left: 20.0, right: 20.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(32),
                         ),
-                      ),
-                    ),
+                        child: _builCardNumberTextInput(
+                            context, cardNumberController)),
 
                     SizedBox(height: getRelativeHeight(0.03)),
                     // PASSWORD
                     Container(
-                      margin: EdgeInsets.only(left: 20, right: 20),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(32),
-                      ),
-                      child: TextFormField(
-                        controller: passwordController,
-                        textAlign: TextAlign.center,
-                        enableSuggestions: true,
-                        obscureText: true,
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Šifra je obavezna!';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.vpn_key_rounded,
-                              color: Colors.grey,
-                            ),
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(
-                                left: 15, bottom: 11, top: 11, right: 15),
-                            labelText: "Šifra",
-                            labelStyle: TextStyle(color: Colors.grey)),
-                      ),
-                    ),
+                        margin: EdgeInsets.only(left: 20, right: 20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(32),
+                        ),
+                        child: _buildPasswordTextInput(
+                            context, passwordController)),
 
                     SizedBox(height: getRelativeHeight(0.03)),
                     // SUBMIT BUTTON
@@ -163,6 +115,62 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _builCardNumberTextInput(
+      BuildContext context, TextEditingController cardNumberController) {
+    return TextFormField(
+      controller: cardNumberController,
+      textAlign: TextAlign.center,
+      enableSuggestions: true,
+      keyboardType: TextInputType.number,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Broj zdravstvene knjižice je obavezan!';
+        } else if (value.toString().length != 11) {
+          return 'Broj zdravstvene knjižice sadrzi 11 cifara!';
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        prefixIcon: Icon(
+          Icons.credit_card,
+          color: Colors.grey,
+        ),
+        border: InputBorder.none,
+        contentPadding:
+            EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+        labelText: "Broj zdravstvene knjižice",
+        labelStyle: TextStyle(color: Colors.grey),
+      ),
+    );
+  }
+
+  Widget _buildPasswordTextInput(
+      BuildContext context, TextEditingController passwordController) {
+    return TextFormField(
+      controller: passwordController,
+      textAlign: TextAlign.center,
+      enableSuggestions: true,
+      obscureText: true,
+      keyboardType: TextInputType.number,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Šifra je obavezna!';
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.vpn_key_rounded,
+            color: Colors.grey,
+          ),
+          border: InputBorder.none,
+          contentPadding:
+              EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+          labelText: "Šifra",
+          labelStyle: TextStyle(color: Colors.grey)),
     );
   }
 }

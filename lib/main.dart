@@ -1,10 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_health_v2/domain/auth/auth_service.dart';
 import 'package:smart_health_v2/constants/size_confige.dart';
 import 'package:smart_health_v2/domain/data/database.dart';
-import 'package:smart_health_v2/presentation/screens/start_wrapper_screen.dart';
+import 'package:smart_health_v2/presentation/screens/bottom_navigation_screen.dart';
+import 'package:smart_health_v2/presentation/screens/login_screen.dart';
 import 'package:smart_health_v2/routes/router.dart' as router;
 
 Future<void> main() async {
@@ -33,8 +35,11 @@ class MyApp extends StatelessWidget {
         ),
         onGenerateRoute: router.generateRoute,
         home: Builder(builder: (context) {
+          auth.User? firebaseUser = auth.FirebaseAuth.instance.currentUser;
           SizeConfig.initSize(context);
-          return StartWrapperScreen();
+          return firebaseUser == null
+              ? LoginScreen()
+              : BottomNavigationScreen();
         }),
       ),
     );

@@ -22,7 +22,7 @@ class SettingsScreen extends StatelessWidget {
               Container(
                 margin: EdgeInsets.only(top: 10.0),
                 child: Text(
-                  "Settings",
+                  "Podešavanja",
                   style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -49,7 +49,7 @@ class SettingsScreen extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(top: 3.0),
                         child: Text(
-                          "Sign out",
+                          "Odjavi se",
                           style: TextStyle(fontSize: 20.0),
                         ),
                       )
