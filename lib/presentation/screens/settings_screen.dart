@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_health_v2/constants/constants.dart';
 import 'package:smart_health_v2/domain/auth/auth_service.dart';
+import 'package:smart_health_v2/presentation/common/screen_title.dart';
 import 'package:smart_health_v2/routes/routes_constants.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -19,13 +20,7 @@ class SettingsScreen extends StatelessWidget {
           child: Column(
             children: [
               /// TITLE
-              Container(
-                margin: EdgeInsets.only(top: 10.0),
-                child: Text(
-                  "Podešavanja",
-                  style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
-                ),
-              ),
+              ScreenTitle(titleText: "Podešavanja", icon: Icons.settings),
               Divider(color: Colors.grey),
 
               /// SIGN OUT BUTTON
