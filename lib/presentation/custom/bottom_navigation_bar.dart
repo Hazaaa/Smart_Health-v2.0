@@ -73,22 +73,22 @@ class BottomNavigation extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              onItemPressed(2);
+                              onItemPressed(3);
                             },
                             child: Icon(
                               itemIcons[2],
-                              color: selectedIndex == 2
+                              color: selectedIndex == 3
                                   ? kPrimaryDarkColor
                                   : kLightTextColor,
                             ),
                           ),
                           GestureDetector(
                             onTap: () {
-                              onItemPressed(3);
+                              onItemPressed(4);
                             },
                             child: Icon(
                               itemIcons[3],
-                              color: selectedIndex == 3
+                              color: selectedIndex == 4
                                   ? kPrimaryDarkColor
                                   : kLightTextColor,
                             ),
@@ -127,15 +127,20 @@ class BottomNavigation extends StatelessWidget {
                   ),
                   height: getRelativeWidth(0.135),
                   width: getRelativeWidth(0.135),
-                  child: Center(
-                      child: Transform.rotate(
-                    angle: math.pi / 4,
-                    child: Icon(
-                      centerIcon,
-                      color: Colors.white,
-                      size: getRelativeWidth(0.07),
-                    ),
-                  )),
+                  child: GestureDetector(
+                    onTap: () {
+                      onItemPressed(2);
+                    },
+                    child: Center(
+                        child: Transform.rotate(
+                      angle: math.pi / 4,
+                      child: Icon(
+                        centerIcon,
+                        color: Colors.white,
+                        size: getRelativeWidth(0.07),
+                      ),
+                    )),
+                  ),
                 ),
               ),
             ),

@@ -22,38 +22,65 @@ class SettingsScreen extends StatelessWidget {
               /// TITLE
               ScreenTitle(titleText: "Podešavanja", icon: Icons.settings),
               Divider(color: Colors.grey),
-
-              /// SIGN OUT BUTTON
-              Container(
-                margin: EdgeInsets.only(top: 5.0, left: 20.0, right: 20.0),
-                padding: EdgeInsets.all(15.0),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(25)),
-                child: GestureDetector(
-                  onTap: () {
-                    authService.signOutUser();
-                    Navigator.pushReplacementNamed(context, LoginRoute);
-                  },
-                  child: Row(
-                    children: [
-                      Icon(FontAwesomeIcons.signOutAlt),
-                      SizedBox(
-                        width: 15.0,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 3.0),
-                        child: Text(
-                          "Odjavi se",
-                          style: TextStyle(fontSize: 20.0),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
+              SizedBox(height: 10.0),
+              _buildAboutButton(context),
+              SizedBox(height: 10.0),
+              _buildSignOutButton(context, authService)
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAboutButton(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.only(left: 20.0, right: 20.0),
+        padding: EdgeInsets.all(15.0),
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(25)),
+        child: Row(
+          children: [
+            Icon(Icons.perm_device_information_rounded),
+            SizedBox(
+              width: 15.0,
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 3.0),
+              child: Text(
+                "O aplikaciji",
+                style: TextStyle(fontSize: 20.0),
+              ),
+            )
+          ],
+        ));
+  }
+
+  Widget _buildSignOutButton(BuildContext context, AuthService authService) {
+    return Container(
+      margin: EdgeInsets.only(top: 5.0, left: 20.0, right: 20.0),
+      padding: EdgeInsets.all(15.0),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(25)),
+      child: GestureDetector(
+        onTap: () {
+          authService.signOutUser();
+          Navigator.pushReplacementNamed(context, LoginRoute);
+        },
+        child: Row(
+          children: [
+            Icon(FontAwesomeIcons.signOutAlt),
+            SizedBox(
+              width: 15.0,
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 3.0),
+              child: Text(
+                "Odjavi se",
+                style: TextStyle(fontSize: 20.0),
+              ),
+            )
+          ],
         ),
       ),
     );

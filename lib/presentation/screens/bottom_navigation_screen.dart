@@ -44,7 +44,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
         return DoctorScreen();
       case 1:
         return NotificationScreen();
-      case 3:
+      case 4:
         return SettingsScreen();
       default:
         return DoctorScreen();
