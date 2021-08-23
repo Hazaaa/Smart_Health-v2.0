@@ -19,6 +19,19 @@ class Notification {
             userEmail: json['userEmail']! as String,
             time: json['time'] as Timestamp);
 
+  String getFormatedDateTime() {
+    DateTime dateTime = this.time.toDate();
+    String year = dateTime.year.toString();
+    String month = dateTime.month.toString();
+    String day = dateTime.day.toString();
+    String hour = dateTime.hour.toString();
+    String minute = dateTime.minute < 10
+        ? '0' + dateTime.minute.toString()
+        : dateTime.minute.toString();
+
+    return '$day.$month.$year $hour:$minute';
+  }
+
   /// Returns time of recieving difference to DateTime.now in human readable string
   String getTimeOfReceiving() {
     DateTime dateTime = this.time.toDate();
@@ -39,7 +52,7 @@ class Notification {
 
     final diffInHours = difference.inHours;
 
-    if (diffInHours < 60) {
+    if (diffInHours < 24) {
       return '${diffInHours.toString()} sati';
     }
 
