@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
-class LocationService with ChangeNotifier {
+class LocationService {
   Location location = new Location();
 
   late bool _serviceEnabled;
@@ -11,10 +10,7 @@ class LocationService with ChangeNotifier {
   LocationData get locationData => _locationData;
 
   Future<void> getLocation() async {
-    bool _isServiceEnabled = await isServiceEnabled();
-    bool _isPermissionGranted = await isPermissionGranted();
     _locationData = await location.getLocation();
-    notifyListeners();
   }
 
   Stream<LocationData> getLocationOnChangeStream() {
