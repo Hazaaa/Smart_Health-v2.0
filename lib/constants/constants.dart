@@ -12,7 +12,6 @@ const List<Color> kCategoriesPrimaryColor = [
   Color(0xff5DF9D3),
   Color(0xff85E4FD),
   Color(0xffB8ACFF)
-
 ];
 
 const List<Color> kCategoriesSecondryColor = [
@@ -21,3 +20,6 @@ const List<Color> kCategoriesSecondryColor = [
   Color(0xff45BAFB),
   Color(0xff9182F9)
 ];
+
+const String googleMapStyle =
+    '[{ "featureType": "poi", "elementType": "labels.text", "stylers": [{"visibility": "off"}]},{"featureType": "poi.business","stylers": [{"visibility": "off"}]},{"featureType": "road","elementType": "labels.icon","stylers": [{"visibility": "off"}]},{"featureType": "transit","stylers": [{"visibility": "off"}]}]';

@@ -88,8 +88,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    NotificationDetailsScreen(notification, heroTag)));
+                builder: (context) => NotificationDetailsScreen(notification)));
       },
       child: Card(
         shape:

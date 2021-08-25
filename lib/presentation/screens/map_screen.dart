@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +25,15 @@ class _MapScreenState extends State<MapScreen> {
   bool _liveTracking = false;
   StreamSubscription<LocationData>? locationOnChangeStream;
   CameraPosition? homeCameraPosition;
+  LatLng? homeCoords;
+  List<Marker> markers = [];
+  BitmapDescriptor? homeIcon;
+  BitmapDescriptor? pharmacyIcon;
+  @override
+  void initState() {
+    super.initState();
+    _setMarkerIcons();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +48,17 @@ class _MapScreenState extends State<MapScreen> {
                 mapType: MapType.normal,
                 onMapCreated: (GoogleMapController controller) {
                   _controller.complete(controller);
+                  controller.setMapStyle(googleMapStyle);
+                  if (homeCoords != null) {
+                    setState(() {
+                      markers.add(Marker(
+                          markerId: MarkerId("home_marker"),
+                          position: homeCoords!,
+                          icon: homeIcon!));
+                    });
+                  }
                 },
+                markers: markers.toSet(),
                 myLocationEnabled: true,
                 myLocationButtonEnabled: false,
               );
@@ -85,11 +107,12 @@ class _MapScreenState extends State<MapScreen> {
         .animateCamera(CameraUpdate.newCameraPosition(homeCameraPosition!));
   }
 
-  CameraPosition _getHomeCameraPosition(GeoPoint homeCoords) {
+  CameraPosition _getHomeCameraPosition(GeoPoint _homeCoords) {
     if (homeCameraPosition == null) {
-      homeCameraPosition = CameraPosition(
-          target: LatLng(homeCoords.latitude, homeCoords.longitude), zoom: 17);
+      homeCoords = LatLng(_homeCoords.latitude, _homeCoords.longitude);
+      homeCameraPosition = CameraPosition(target: homeCoords!, zoom: 17);
     }
+
     return homeCameraPosition!;
   }
 
@@ -113,5 +136,25 @@ class _MapScreenState extends State<MapScreen> {
         }
       }
     });
+  }
+
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
+
+  void _setMarkerIcons() async {
+    final Uint8List homeIconBytes =
+        await getBytesFromAsset('assets/images/house_icon.png', 100);
+    homeIcon = BitmapDescriptor.fromBytes(homeIconBytes);
+
+    final Uint8List pharmacyIconBytes =
+        await getBytesFromAsset('assets/images/pharmacy_icon.png', 100);
+    pharmacyIcon = BitmapDescriptor.fromBytes(pharmacyIconBytes);
   }
 }

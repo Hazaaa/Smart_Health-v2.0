@@ -6,18 +6,16 @@ import 'package:smart_health_v2/presentation/common/screen_title.dart';
 
 class NotificationDetailsScreen extends StatefulWidget {
   final notification.Notification _notification;
-  final String _heroTag;
-  NotificationDetailsScreen(this._notification, this._heroTag);
+  NotificationDetailsScreen(this._notification);
 
   @override
   _NotificationDetailsScreenState createState() =>
-      _NotificationDetailsScreenState(_notification, _heroTag);
+      _NotificationDetailsScreenState(_notification);
 }
 
 class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
   final notification.Notification _notification;
-  final String _heroTag;
-  _NotificationDetailsScreenState(this._notification, this._heroTag);
+  _NotificationDetailsScreenState(this._notification);
 
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:smart_health_v2/domain/auth/models/health_card.dart';
 import 'package:smart_health_v2/domain/auth/models/user.dart';
-import 'package:smart_health_v2/domain/auth/models/user_details.dart';
 
 class AuthService with ChangeNotifier {
   final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;

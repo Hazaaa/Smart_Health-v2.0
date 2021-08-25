@@ -26,10 +26,10 @@ dependencies:
 
 
   # UI Packages
-  flutter_svg: ^0.19.1
   font_awesome_flutter: ^9.1.0
   flutter_rating_bar: ^4.0.0
   gradient_widgets: ^0.6.0
+  flutter_svg: ^0.22.0
 
   # Mandatory Packages
   provider: ^5.0.0
