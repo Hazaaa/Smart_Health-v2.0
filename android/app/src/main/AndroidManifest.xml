@@ -3,6 +3,8 @@
    <application
         android:label="smart_health_v2"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyCiCZQAjNzccnidAJH5bAJ6SzaipxqQxWU"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

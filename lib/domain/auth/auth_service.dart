@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:smart_health_v2/domain/auth/models/health_card.dart';
 import 'package:smart_health_v2/domain/auth/models/user.dart';
+import 'package:smart_health_v2/domain/auth/models/user_details.dart';
 
 class AuthService with ChangeNotifier {
   final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool _signinInProgress = false;
   String? _errorMessage;
 
@@ -13,16 +16,31 @@ class AuthService with ChangeNotifier {
   String get errorMessage => _errorMessage ?? '';
   auth.FirebaseAuth get firebaseAuthInstance => _firebaseAuth;
 
+  User? currentUser;
+
   User? mapUserFromFirebase(auth.User? user) {
     if (user == null) {
       return null;
     }
 
-    return User(user.uid, user.email);
+    User loggedUser = User(user.uid, user.email);
+
+    return loggedUser;
   }
 
   User? get user {
-    return mapUserFromFirebase(_firebaseAuth.currentUser);
+    if (currentUser == null) {
+      currentUser = mapUserFromFirebase(_firebaseAuth.currentUser);
+    }
+
+    return currentUser;
+  }
+
+  Future<DocumentSnapshot> get userDetails {
+    return _firestore
+        .collection('userDetails')
+        .doc(_firebaseAuth.currentUser!.uid)
+        .get();
   }
 
   Future<void> signInWithCardNumberAndPassword(

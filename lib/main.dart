@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:smart_health_v2/domain/auth/auth_service.dart';
 import 'package:smart_health_v2/constants/size_confige.dart';
 import 'package:smart_health_v2/domain/data/database.dart';
+import 'package:smart_health_v2/domain/location/location_service.dart';
 import 'package:smart_health_v2/presentation/screens/bottom_navigation_screen.dart';
 import 'package:smart_health_v2/presentation/screens/login_screen.dart';
 import 'package:smart_health_v2/routes/router.dart' as router;
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<AuthService>(
           create: (_) => AuthService(),
         ),
-        Provider<Database>(create: (_) => Database())
+        Provider<Database>(create: (_) => Database()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

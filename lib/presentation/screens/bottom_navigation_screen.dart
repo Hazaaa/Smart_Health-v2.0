@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_health_v2/constants/constants.dart';
 import 'package:smart_health_v2/presentation/custom/bottom_navigation_bar.dart';
 import 'package:smart_health_v2/presentation/screens/doctor_screen.dart';
+import 'package:smart_health_v2/presentation/screens/map_screen.dart';
 import 'package:smart_health_v2/presentation/screens/notification_screen.dart';
 import 'package:smart_health_v2/presentation/screens/settings_screen.dart';
 
@@ -44,6 +45,8 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
         return DoctorScreen();
       case 1:
         return NotificationScreen();
+      case 2:
+        return MapScreen();
       case 4:
         return SettingsScreen();
       default:

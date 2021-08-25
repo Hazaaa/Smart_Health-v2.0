@@ -22,7 +22,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     List<notification.Notification> notifications = [];
     final db = Provider.of<Database>(context, listen: false);
-    final authService = Provider.of<AuthService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context);
 
     return Scaffold(
       backgroundColor: kBackgroundColor,
