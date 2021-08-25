@@ -29,6 +29,8 @@ class _MapScreenState extends State<MapScreen> {
   List<Marker> markers = [];
   BitmapDescriptor? homeIcon;
   BitmapDescriptor? pharmacyIcon;
+  bool _showOnlyPharmacies = false;
+
   @override
   void initState() {
     super.initState();
@@ -48,7 +50,6 @@ class _MapScreenState extends State<MapScreen> {
                 mapType: MapType.normal,
                 onMapCreated: (GoogleMapController controller) {
                   _controller.complete(controller);
-                  controller.setMapStyle(googleMapStyle);
                   if (homeCoords != null) {
                     setState(() {
                       markers.add(Marker(
@@ -61,10 +62,12 @@ class _MapScreenState extends State<MapScreen> {
                 markers: markers.toSet(),
                 myLocationEnabled: true,
                 myLocationButtonEnabled: false,
+                mapToolbarEnabled: false,
               );
             }),
             floatingActionButton: Column(
               mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 FloatingActionButton(
                   onPressed: _toogleLiveLocation,
@@ -73,8 +76,8 @@ class _MapScreenState extends State<MapScreen> {
                       ? Icons.location_disabled_rounded
                       : Icons.my_location_rounded),
                   tooltip: _liveTracking
-                      ? "Turn off live tracking"
-                      : "Turn on live tracking",
+                      ? "Ugasi uživo praćenje"
+                      : "Upali uživo praćenje",
                 ),
                 SizedBox(
                   height: 10.0,
@@ -95,7 +98,31 @@ class _MapScreenState extends State<MapScreen> {
                       ),
                     ),
                   ),
-                  tooltip: "Show home",
+                  tooltip: "Prikaži kuću",
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Container(
+                  width: 200.0,
+                  height: 40.0,
+                  padding: EdgeInsets.only(left: 10.0),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.teal.shade400),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Prikaži samo apoteke:",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Checkbox(
+                          activeColor: Colors.white,
+                          checkColor: Colors.black,
+                          value: _showOnlyPharmacies,
+                          onChanged: _toggleMapStyle)
+                    ],
+                  ),
                 ),
               ],
             )));
@@ -134,6 +161,19 @@ class _MapScreenState extends State<MapScreen> {
         if (locationOnChangeStream != null) {
           locationOnChangeStream?.cancel();
         }
+      }
+    });
+  }
+
+  Future<void> _toggleMapStyle(bool? value) async {
+    _showOnlyPharmacies = value!;
+    final GoogleMapController controller = await _controller.future;
+
+    setState(() {
+      if (_showOnlyPharmacies) {
+        controller.setMapStyle(googleMapCustomStyle);
+      } else {
+        controller.setMapStyle(null);
       }
     });
   }
