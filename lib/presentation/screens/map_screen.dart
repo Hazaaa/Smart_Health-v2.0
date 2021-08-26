@@ -1,16 +1,18 @@
 import 'dart:async';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_health_v2/constants/constants.dart';
+import 'package:smart_health_v2/constants/icons_config.dart';
+import 'package:smart_health_v2/constants/size_confige.dart';
 import 'package:smart_health_v2/domain/auth/auth_service.dart';
+import 'package:smart_health_v2/domain/data/database.dart';
 import 'package:smart_health_v2/domain/location/location_service.dart';
+import 'package:smart_health_v2/models/pharmacy.dart';
 
 class MapScreen extends StatefulWidget {
   MapScreen({Key? key}) : super(key: key);
@@ -30,20 +32,32 @@ class _MapScreenState extends State<MapScreen> {
   BitmapDescriptor? homeIcon;
   BitmapDescriptor? pharmacyIcon;
   bool _showOnlyPharmacies = false;
+  List<Pharmacy> pharmacies = [];
+  double floatingButtonSize = 60.0;
+  Pharmacy? selectedPharmacy;
+  bool isPharmacySelected = false;
 
   @override
   void initState() {
     super.initState();
-    _setMarkerIcons();
+    homeIcon = IconsConfig.homeIcon!;
+    pharmacyIcon = IconsConfig.pharmacyIcon!;
   }
 
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<Database>(context, listen: false);
+
+    if (pharmacies.length == 0) {
+      _getPharmacies(db);
+    }
+
     return SafeArea(
-        child: Scaffold(
-            body: Consumer<AuthService>(
-                builder: (context, authService, snapshot) {
-              return GoogleMap(
+      child: Scaffold(
+        body: Consumer<AuthService>(builder: (context, authService, snapshot) {
+          return Stack(
+            children: [
+              GoogleMap(
                 initialCameraPosition: _getHomeCameraPosition(
                     authService.currentUser!.userDetails.homeCoords),
                 zoomControlsEnabled: false,
@@ -54,6 +68,7 @@ class _MapScreenState extends State<MapScreen> {
                     setState(() {
                       markers.add(Marker(
                           markerId: MarkerId("home_marker"),
+                          infoWindow: InfoWindow(title: "Kuća"),
                           position: homeCoords!,
                           icon: homeIcon!));
                     });
@@ -63,13 +78,17 @@ class _MapScreenState extends State<MapScreen> {
                 myLocationEnabled: true,
                 myLocationButtonEnabled: false,
                 mapToolbarEnabled: false,
-              );
-            }),
-            floatingActionButton: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                FloatingActionButton(
+              ),
+
+              // DETAILS WIDGET
+              Visibility(
+                  visible: isPharmacySelected,
+                  child: _buildPharmacyDetailWidget()),
+              Container(
+                margin: EdgeInsets.only(
+                    right: 10.0, bottom: floatingButtonSize + 20.0),
+                alignment: Alignment.bottomRight,
+                child: FloatingActionButton(
                   onPressed: _toogleLiveLocation,
                   backgroundColor: _liveTracking ? Colors.red : Colors.green,
                   child: Icon(_liveTracking
@@ -79,10 +98,11 @@ class _MapScreenState extends State<MapScreen> {
                       ? "Ugasi uživo praćenje"
                       : "Upali uživo praćenje",
                 ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                FloatingActionButton(
+              ),
+              Container(
+                margin: EdgeInsets.only(right: 10.0, bottom: 10.0),
+                alignment: Alignment.bottomRight,
+                child: FloatingActionButton(
                   onPressed: _moveCameraToUserHome,
                   child: Container(
                     height: 60,
@@ -100,13 +120,15 @@ class _MapScreenState extends State<MapScreen> {
                   ),
                   tooltip: "Prikaži kuću",
                 ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Container(
+              ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                child: Container(
+                  margin: EdgeInsets.only(left: 10.0, bottom: 15.0),
                   width: 200.0,
                   height: 40.0,
-                  padding: EdgeInsets.only(left: 10.0),
+                  padding: EdgeInsets.only(left: 15.0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       color: Colors.teal.shade400),
@@ -124,8 +146,12 @@ class _MapScreenState extends State<MapScreen> {
                     ],
                   ),
                 ),
-              ],
-            )));
+              )
+            ],
+          );
+        }),
+      ),
+    );
   }
 
   Future<void> _moveCameraToUserHome() async {
@@ -137,7 +163,7 @@ class _MapScreenState extends State<MapScreen> {
   CameraPosition _getHomeCameraPosition(GeoPoint _homeCoords) {
     if (homeCameraPosition == null) {
       homeCoords = LatLng(_homeCoords.latitude, _homeCoords.longitude);
-      homeCameraPosition = CameraPosition(target: homeCoords!, zoom: 17);
+      homeCameraPosition = CameraPosition(target: homeCoords!, zoom: 16);
     }
 
     return homeCameraPosition!;
@@ -153,7 +179,7 @@ class _MapScreenState extends State<MapScreen> {
           controller.animateCamera(
             CameraUpdate.newCameraPosition(
               CameraPosition(
-                  target: LatLng(l.latitude!, l.longitude!), zoom: 17),
+                  target: LatLng(l.latitude!, l.longitude!), zoom: 18),
             ),
           );
         });
@@ -162,6 +188,33 @@ class _MapScreenState extends State<MapScreen> {
           locationOnChangeStream?.cancel();
         }
       }
+    });
+  }
+
+  void _getPharmacies(Database db) {
+    db.pharmaciesCollection.getData().then((value) {
+      pharmacies.clear();
+      value.docs.forEach((element) {
+        pharmacies.add(Pharmacy.fromJson(element));
+      });
+
+      setState(() {
+        pharmacies.forEach((pharmacy) {
+          markers.add(
+            Marker(
+                markerId: MarkerId("pharmacy_${pharmacy.name}"),
+                position:
+                    LatLng(pharmacy.coords.latitude, pharmacy.coords.longitude),
+                icon: pharmacyIcon!,
+                onTap: () {
+                  setState(() {
+                    isPharmacySelected = true;
+                    selectedPharmacy = pharmacy;
+                  });
+                }),
+          );
+        });
+      });
     });
   }
 
@@ -178,23 +231,84 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
-  Future<Uint8List> getBytesFromAsset(String path, int width) async {
-    ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-        targetWidth: width);
-    ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
-        .buffer
-        .asUint8List();
-  }
-
-  void _setMarkerIcons() async {
-    final Uint8List homeIconBytes =
-        await getBytesFromAsset('assets/images/house_icon.png', 100);
-    homeIcon = BitmapDescriptor.fromBytes(homeIconBytes);
-
-    final Uint8List pharmacyIconBytes =
-        await getBytesFromAsset('assets/images/pharmacy_icon.png', 100);
-    pharmacyIcon = BitmapDescriptor.fromBytes(pharmacyIconBytes);
+  Widget _buildPharmacyDetailWidget() {
+    return Container(
+      height: 95.0,
+      width: SizeConfig.screenWidth,
+      margin: EdgeInsets.all(15.0),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(20.0)),
+      child: Stack(
+        children: [
+          Positioned(
+            top: 8.0,
+            right: 10.0,
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  isPharmacySelected = false;
+                  selectedPharmacy = null;
+                });
+              },
+              child: Icon(FontAwesomeIcons.times, size: 18.0),
+            ),
+          ),
+          Column(
+            children: [
+              SizedBox(height: 8.0),
+              Text(
+                selectedPharmacy == null
+                    ? ''
+                    : "Apoteka: ${selectedPharmacy!.name}",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17.0,
+                    color: Colors.black87),
+              ),
+              SizedBox(height: 3.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    FontAwesomeIcons.mapMarkerAlt,
+                    size: 18.0,
+                  ),
+                  SizedBox(width: 5.0),
+                  Container(
+                    margin: EdgeInsets.only(top: 2.0),
+                    child: Text(
+                      selectedPharmacy == null
+                          ? ''
+                          : "${selectedPharmacy!.address}",
+                      style: TextStyle(fontSize: 14.0, color: Colors.black87),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    FontAwesomeIcons.clock,
+                    size: 18.0,
+                  ),
+                  SizedBox(width: 5.0),
+                  Container(
+                    margin: EdgeInsets.only(top: 2.0),
+                    child: Text(
+                      selectedPharmacy == null
+                          ? ''
+                          : "${selectedPharmacy!.workingHours}",
+                      style: TextStyle(fontSize: 14.0, color: Colors.black87),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
