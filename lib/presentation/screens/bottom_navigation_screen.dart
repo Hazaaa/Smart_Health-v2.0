@@ -5,6 +5,7 @@ import 'package:smart_health_v2/presentation/screens/doctor_screen.dart';
 import 'package:smart_health_v2/presentation/screens/map_screen.dart';
 import 'package:smart_health_v2/presentation/screens/notification_screen.dart';
 import 'package:smart_health_v2/presentation/screens/settings_screen.dart';
+import 'package:smart_health_v2/presentation/screens/user_details_screen.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
   BottomNavigationScreen({Key? key}) : super(key: key);
@@ -47,6 +48,8 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
         return NotificationScreen();
       case 2:
         return MapScreen();
+      case 3:
+        return UserDetailsScreen();
       case 4:
         return SettingsScreen();
       default:

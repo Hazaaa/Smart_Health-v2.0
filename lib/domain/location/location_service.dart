@@ -9,8 +9,8 @@ class LocationService {
 
   LocationData get locationData => _locationData;
 
-  Future<void> getLocation() async {
-    _locationData = await location.getLocation();
+  Future<LocationData> getLocation() async {
+    return await location.getLocation();
   }
 
   Stream<LocationData> getLocationOnChangeStream() {
