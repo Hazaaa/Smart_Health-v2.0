@@ -7,6 +7,7 @@ import 'package:smart_health_v2/constants/size_confige.dart';
 import 'package:smart_health_v2/domain/auth/auth_service.dart';
 import 'package:smart_health_v2/domain/auth/models/user_details.dart';
 
+// ignore: must_be_immutable
 class UserDetailsScreen extends StatelessWidget {
   UserDetailsScreen();
 
@@ -25,13 +26,35 @@ class UserDetailsScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(height: 10.0),
-                    CircleAvatar(
-                      radius: 40.0,
-                      backgroundImage: AssetImage(userDetails!.imageUrl),
+                    Container(
+                      width: double.infinity,
+                      child: Stack(
+                        children: [
+                          Center(
+                            child: CircleAvatar(
+                              radius: 50.0,
+                              backgroundImage:
+                                  AssetImage(userDetails!.imageUrl),
+                            ),
+                          ),
+                          Positioned(
+                              bottom: 0,
+                              right: SizeConfig.screenWidth / 3,
+                              child: Container(
+                                child: ElevatedButton(
+                                  child:
+                                      Icon(FontAwesomeIcons.camera, size: 17.0),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.grey,
+                                    shape: CircleBorder(),
+                                    padding: EdgeInsets.all(5),
+                                  ),
+                                  onPressed: () {},
+                                ),
+                              )),
+                        ],
+                      ),
                     ),
-
-                    // TODO: ADD IMPORT PICTURE ICON!!!!!
-
                     SizedBox(height: 20.0),
                     Text(
                       userDetails!.name,
