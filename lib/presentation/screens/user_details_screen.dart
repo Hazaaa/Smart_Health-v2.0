@@ -29,6 +29,9 @@ class UserDetailsScreen extends StatelessWidget {
                       radius: 40.0,
                       backgroundImage: AssetImage(userDetails!.imageUrl),
                     ),
+
+                    // TODO: ADD IMPORT PICTURE ICON!!!!!
+
                     SizedBox(height: 20.0),
                     Text(
                       userDetails!.name,
@@ -220,7 +223,7 @@ class UserDetailsScreen extends StatelessWidget {
                             ],
                           ),
                           Container(
-                            margin: EdgeInsets.only(left: 13.0),
+                            margin: EdgeInsets.only(left: 5.0),
                             width: 60.0,
                             height: 40.0,
                             child: MaterialButton(
@@ -236,6 +239,7 @@ class UserDetailsScreen extends StatelessWidget {
                             ),
                           ),
                           Container(
+                            margin: EdgeInsets.only(right: 5.0),
                             width: 60.0,
                             height: 40.0,
                             child: MaterialButton(

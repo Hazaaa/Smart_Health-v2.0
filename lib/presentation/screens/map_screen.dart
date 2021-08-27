@@ -425,10 +425,11 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> _showDirections() async {
     final GoogleMapController controller = await _controller.future;
     final userCurrentLocation = await locationService.getLocation();
+    final testCoords = LatLng(43.32048430245083, 21.899400427937508);
     final userCoords =
         LatLng(userCurrentLocation.latitude!, userCurrentLocation.longitude!);
     final directions = await directionService.getDirections(
-        LatLng(43.32048430245083, 21.899400427937508),
+        userCoords,
         LatLng(selectedPharmacy!.coords.latitude,
             selectedPharmacy!.coords.longitude));
 
