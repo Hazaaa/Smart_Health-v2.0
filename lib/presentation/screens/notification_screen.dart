@@ -53,8 +53,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     notifications.clear();
                     final docs = snapshot.data!.docs;
                     docs.forEach((element) {
-                      notifications.add(
-                          notification.Notification.fromJson(element.data()));
+                      notifications.add(notification.Notification.getFromJson(
+                          element.id, element.data()));
                     });
                     return notifications.length == 0
                         ? Text("Nemate obaveštenja!")
@@ -65,7 +65,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
                                 return _buildListItem(
-                                    context, index, notifications[index]);
+                                    context, index, notifications[index], db);
                               },
                               itemCount: notifications.length,
                             ),
@@ -80,20 +80,32 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
-  Widget _buildListItem(
-      BuildContext context, int index, notification.Notification notification) {
+  Widget _buildListItem(BuildContext context, int index,
+      notification.Notification notification, Database db) {
     final String heroTag = "notification_${index.toString()}";
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => NotificationDetailsScreen(notification)));
+        db.notificationsCollection
+            .updateNotificationStatus(notification.id!)
+            .then(
+          (_) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => NotificationDetailsScreen(notification),
+              ),
+            );
+          },
+        ).catchError((_) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Unable to update status of notification")));
+        });
       },
       child: Card(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         elevation: 5,
+        color: notification.getNotificationColor(),
         shadowColor: Colors.grey,
         margin: EdgeInsets.all(10.0),
         child: Container(

@@ -6,13 +6,22 @@ import 'package:smart_health_v2/constants/icons_config.dart';
 import 'package:smart_health_v2/domain/auth/auth_service.dart';
 import 'package:smart_health_v2/constants/size_confige.dart';
 import 'package:smart_health_v2/domain/data/database.dart';
+import 'package:smart_health_v2/domain/notification/local_notification_service.dart';
 import 'package:smart_health_v2/presentation/screens/bottom_navigation_screen.dart';
 import 'package:smart_health_v2/presentation/screens/login_screen.dart';
 import 'package:smart_health_v2/routes/router.dart' as router;
 
+// This is for some work to be done when app is in background and notification arrives
+// Future<void> _backgroundHandler(RemoteMessage message) async {
+//   print(message.data.toString());
+//   print(message.notification!.title);
+// }
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  // This will handle retrieve message when app is in background
+  // FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
   runApp(MyApp());
 }
 
@@ -36,6 +45,7 @@ class MyApp extends StatelessWidget {
         ),
         onGenerateRoute: router.generateRoute,
         home: Builder(builder: (context) {
+          LocalNotificationService.initialize(context);
           auth.User? firebaseUser = auth.FirebaseAuth.instance.currentUser;
           SizeConfig.initSize(context);
           IconsConfig.initIcons();

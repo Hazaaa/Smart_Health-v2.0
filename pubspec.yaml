@@ -34,11 +34,14 @@ dependencies:
   # Mandatory Packages
   provider: ^5.0.0
   url_launcher: ^6.0.3
+  flutter_local_notifications: ^8.1.1+2
+  shared_preferences: ^2.0.7
 
   # Firebase Packages
   firebase_core: ^1.4.0
   firebase_auth: ^3.0.1
   cloud_firestore: ^2.4.0
+  firebase_messaging: ^10.0.6
 
   # Google Maps Packages
   google_maps_flutter: ^2.0.6

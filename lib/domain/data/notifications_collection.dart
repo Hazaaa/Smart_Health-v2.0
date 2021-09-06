@@ -20,4 +20,8 @@ class NotificationsCollection {
         .orderBy('time', descending: true)
         .snapshots();
   }
+
+  Future<void> updateNotificationStatus(String notificationId) {
+    return _collection.doc(notificationId).update({'status': 'seen'});
+  }
 }
