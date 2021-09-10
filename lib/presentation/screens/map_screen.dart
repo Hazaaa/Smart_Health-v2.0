@@ -18,13 +18,23 @@ import 'package:smart_health_v2/domain/location/location_service.dart';
 import 'package:smart_health_v2/models/pharmacy.dart';
 
 class MapScreen extends StatefulWidget {
-  MapScreen({Key? key}) : super(key: key);
+  final bool pickingPharmacy;
+  final Function? requestFunction;
+  final String? selectedPharmacyId;
+  MapScreen(
+      {this.pickingPharmacy = false,
+      this.requestFunction,
+      this.selectedPharmacyId});
 
   @override
-  _MapScreenState createState() => _MapScreenState();
+  _MapScreenState createState() =>
+      _MapScreenState(pickingPharmacy, requestFunction, selectedPharmacyId);
 }
 
 class _MapScreenState extends State<MapScreen> {
+  final bool pickingPharmacy;
+  final Function? requestFunction;
+  final String? selectedPharmacyId;
   Completer<GoogleMapController> _controller = Completer();
   LocationService locationService = LocationService();
   bool _liveTracking = false;
@@ -42,6 +52,9 @@ class _MapScreenState extends State<MapScreen> {
   DirectionService directionService = DirectionService();
   Directions? _directionInfo;
   bool showingDirection = false;
+
+  _MapScreenState(
+      this.pickingPharmacy, this.requestFunction, this.selectedPharmacyId);
 
   @override
   void initState() {
@@ -80,6 +93,10 @@ class _MapScreenState extends State<MapScreen> {
                           icon: homeIcon!));
                     });
                   }
+
+                  if (selectedPharmacyId != null && selectedPharmacy != null) {
+                    _moveCameraToSelectedPharmacy();
+                  }
                 },
                 markers: markers.toSet(),
                 polylines: {
@@ -96,6 +113,12 @@ class _MapScreenState extends State<MapScreen> {
                 myLocationButtonEnabled: false,
                 mapToolbarEnabled: false,
                 compassEnabled: false,
+              ),
+
+              // APP BAR WIDGET
+              Visibility(
+                visible: pickingPharmacy,
+                child: _buildAppBar(),
               ),
 
               // DETAILS WIDGET
@@ -219,6 +242,17 @@ class _MapScreenState extends State<MapScreen> {
         .animateCamera(CameraUpdate.newCameraPosition(homeCameraPosition!));
   }
 
+  Future<void> _moveCameraToSelectedPharmacy() async {
+    final GoogleMapController controller = await _controller.future;
+
+    if (selectedPharmacy != null) {
+      controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+          target: LatLng(selectedPharmacy!.coords.latitude,
+              selectedPharmacy!.coords.longitude),
+          zoom: 16.0)));
+    }
+  }
+
   CameraPosition _getHomeCameraPosition(GeoPoint _homeCoords) {
     if (homeCameraPosition == null) {
       homeCoords = LatLng(_homeCoords.latitude, _homeCoords.longitude);
@@ -254,7 +288,9 @@ class _MapScreenState extends State<MapScreen> {
     db.pharmaciesCollection.getData().then((value) {
       pharmacies.clear();
       value.docs.forEach((element) {
-        pharmacies.add(Pharmacy.fromJson(element));
+        final newPharmacy = Pharmacy.fromJson(element);
+        newPharmacy.id = element.id;
+        pharmacies.add(newPharmacy);
       });
 
       setState(() {
@@ -273,6 +309,13 @@ class _MapScreenState extends State<MapScreen> {
                 }),
           );
         });
+
+        if (selectedPharmacyId != null) {
+          selectedPharmacy = pharmacies
+              .where((element) => element.id == selectedPharmacyId!)
+              .first;
+          isPharmacySelected = true;
+        }
       });
     });
   }
@@ -294,7 +337,11 @@ class _MapScreenState extends State<MapScreen> {
     return Container(
       height: 130.0,
       width: SizeConfig.screenWidth,
-      margin: EdgeInsets.all(15.0),
+      margin: EdgeInsets.only(
+          top: pickingPharmacy ? 65.0 : 15.0,
+          left: 15.0,
+          right: 15.0,
+          bottom: 15.0),
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(20.0)),
       child: Stack(
@@ -367,59 +414,112 @@ class _MapScreenState extends State<MapScreen> {
                 ],
               ),
               SizedBox(height: 8.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 24.0,
-                    width: 110.0,
-                    child: ElevatedButton.icon(
-                      icon: Icon(FontAwesomeIcons.phone, size: 13.0),
-                      label: Text(
-                        "Pozovi",
-                        style: TextStyle(fontSize: 12.0),
+              Visibility(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Visibility(
+                      visible: pickingPharmacy,
+                      child: Container(
+                        height: 24.0,
+                        width: 115.0,
+                        child: ElevatedButton.icon(
+                          icon: Icon(FontAwesomeIcons.handHoldingMedical,
+                              size: 13.0),
+                          label: Text(
+                            "Pokupi ovde",
+                            style: TextStyle(fontSize: 12.0),
+                          ),
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.blue),
+                          ),
+                          onPressed: () {
+                            requestFunction!(selectedPharmacy!.id,
+                                selectedPharmacy!.deviceToken);
+                          },
+                        ),
                       ),
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.green),
-                      ),
-                      onPressed: () {
-                        if (selectedPharmacy != null) {
-                          urlLauncher
-                              .launch("tel:${selectedPharmacy!.phoneNumber}");
-                        }
-                      },
                     ),
-                  ),
-                  SizedBox(width: 10.0),
-                  Container(
-                    height: 24.0,
-                    width: 110.0,
-                    child: ElevatedButton.icon(
-                      icon: Icon(FontAwesomeIcons.directions, size: 13.0),
-                      label: Text(
-                        !showingDirection ? "Prikaži put" : "Sakrij put",
-                        style: TextStyle(fontSize: 12.0),
+                    Visibility(
+                      visible: !pickingPharmacy,
+                      child: Container(
+                        height: 24.0,
+                        width: 110.0,
+                        child: ElevatedButton.icon(
+                          icon: Icon(FontAwesomeIcons.phone, size: 13.0),
+                          label: Text(
+                            "Pozovi",
+                            style: TextStyle(fontSize: 12.0),
+                          ),
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.green),
+                          ),
+                          onPressed: () {
+                            if (selectedPharmacy != null) {
+                              urlLauncher.launch(
+                                  "tel:${selectedPharmacy!.phoneNumber}");
+                            }
+                          },
+                        ),
                       ),
-                      onPressed: () {
-                        if (!showingDirection) {
-                          _showDirections();
-                        } else {
-                          setState(() {
-                            _directionInfo = null;
-                            showingDirection = false;
-                          });
-                        }
-                      },
                     ),
-                  )
-                ],
+                    SizedBox(width: 10.0),
+                    Visibility(
+                      visible: !pickingPharmacy,
+                      child: Container(
+                        height: 24.0,
+                        width: 110.0,
+                        child: ElevatedButton.icon(
+                          icon: Icon(FontAwesomeIcons.directions, size: 13.0),
+                          label: Text(
+                            !showingDirection ? "Prikaži put" : "Sakrij put",
+                            style: TextStyle(fontSize: 12.0),
+                          ),
+                          onPressed: () {
+                            if (!showingDirection) {
+                              _showDirections();
+                            } else {
+                              setState(() {
+                                _directionInfo = null;
+                                showingDirection = false;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               )
             ],
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildAppBar() {
+    return Container(
+        height: 50,
+        width: SizeConfig.screenWidth,
+        decoration: BoxDecoration(color: Colors.white),
+        child: Row(
+          children: [
+            GestureDetector(
+              child: Container(
+                margin: EdgeInsets.only(right: 15.0, left: 10.0),
+                child: GestureDetector(
+                  child: Icon(Icons.arrow_back_ios_rounded),
+                  onTap: () => Navigator.pop(context),
+                ),
+              ),
+            ),
+            Text("Izaberite apoteku gde biste pokupili lekove:",
+                style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold)),
+          ],
+        ));
   }
 
   Future<void> _showDirections() async {

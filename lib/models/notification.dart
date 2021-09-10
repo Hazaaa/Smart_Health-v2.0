@@ -1,6 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+// Notifications types
+const recipeNotificationType = 'recipe';
+const informationNotificationType = 'information';
+
+// Notifications status
+// new, seen, waiting, insufficient, done
+
 class Notification {
   String? id;
   String title;
@@ -9,7 +16,9 @@ class Notification {
   Timestamp time;
   String type;
   String status;
-  List<String>? drugsNames;
+  Map<String, dynamic>? drugsNames;
+  String? requestId;
+  Map<String, dynamic>? additionalData;
 
   Notification(
       {required this.title,
@@ -33,29 +42,33 @@ class Notification {
     Notification newNotification = Notification.fromJson(json);
     newNotification.id = notificationId;
 
-    if (newNotification.type == 'interaction_required' &&
+    if (newNotification.type == recipeNotificationType &&
         json['eRecept'] != null) {
-      List<dynamic> drugs = json['eRecept']! as List<dynamic>;
+      Map<String, dynamic> drugs = json['eRecept']! as Map<String, dynamic>;
 
-      newNotification.drugsNames = [...drugs];
+      newNotification.drugsNames = drugs;
+      newNotification.requestId = json['requestId'] as String?;
+      newNotification.additionalData =
+          json['additionalData'] as Map<String, dynamic>?;
     }
 
     return newNotification;
   }
 
   Color getNotificationColor() {
-    if (this.status == 'seen' && this.type != 'interaction_required') {
+    if (this.status == 'seen' && this.type != recipeNotificationType) {
       return Colors.white;
     }
 
-    if (this.type == 'interaction_required' && this.status == 'done') {
+    if (this.type == recipeNotificationType &&
+        (this.status == 'done' || this.status == 'decline')) {
       return Colors.white;
     }
 
     switch (this.type) {
-      case 'information':
+      case informationNotificationType:
         return Colors.blue.shade100;
-      case 'interaction_required':
+      case recipeNotificationType:
         return Colors.red.shade100;
       default:
         return Colors.white;

@@ -10,6 +10,7 @@ class AuthService with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool _signinInProgress = false;
   String? _errorMessage;
+  String? _deviceToken;
 
   bool get isSigningInProgress => _signinInProgress;
   String get errorMessage => _errorMessage ?? '';
@@ -75,5 +76,13 @@ class AuthService with ChangeNotifier {
           "Došlo je do greške prilikom prijavljivanja! Pokušajte ponovo za par minuta!";
     }
     notifyListeners();
+  }
+
+  String? get deviceToken {
+    return _deviceToken;
+  }
+
+  set deviceToken(String? deviceToken) {
+    _deviceToken = deviceToken!;
   }
 }

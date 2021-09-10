@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:smart_health_v2/presentation/screens/bottom_navigation_screen.dart';
 
 class ScreenTitle extends StatelessWidget {
   final String titleText;
   final IconData? icon;
   final String? heroTag;
   final bool? backArrow;
+  final int? backSelectedIndex;
 
   const ScreenTitle(
-      {required this.titleText, this.icon, this.heroTag, this.backArrow});
+      {required this.titleText,
+      this.icon,
+      this.heroTag,
+      this.backArrow,
+      this.backSelectedIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +28,17 @@ class ScreenTitle extends StatelessWidget {
               margin: EdgeInsets.only(right: 15.0, left: 10.0),
               child: GestureDetector(
                 child: Icon(Icons.arrow_back_ios_rounded),
-                onTap: () => Navigator.pop(context),
+                onTap: () {
+                  if (backSelectedIndex != null) {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BottomNavigationScreen(
+                                selectedIndex: this.backSelectedIndex!)));
+                  } else {
+                    Navigator.pop(context);
+                  }
+                },
               ),
             ),
           ),

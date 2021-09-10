@@ -9,6 +9,8 @@ class NotificationsCollection {
     _firestore = firestore;
   }
 
+  CollectionReference get collectionRef => _collection;
+
   Future<QuerySnapshot> getData() async {
     return await _collection.get();
   }
@@ -21,7 +23,11 @@ class NotificationsCollection {
         .snapshots();
   }
 
-  Future<void> updateNotificationStatus(String notificationId) {
-    return _collection.doc(notificationId).update({'status': 'seen'});
+  Future<void> updateNotificationStatus(String notificationId, String status) {
+    return _collection.doc(notificationId).update({'status': status});
+  }
+
+  Stream<DocumentSnapshot> getNotification(String notificationId) {
+    return _collection.doc(notificationId).snapshots();
   }
 }

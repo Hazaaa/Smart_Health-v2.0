@@ -246,9 +246,9 @@ class UserDetailsScreen extends StatelessWidget {
                             ],
                           ),
                           Container(
-                            margin: EdgeInsets.only(left: 5.0),
-                            width: 60.0,
-                            height: 40.0,
+                            margin: EdgeInsets.only(left: 4.0),
+                            width: 55.0,
+                            height: 35.0,
                             child: MaterialButton(
                               minWidth: 60.0,
                               color: Colors.green,
@@ -262,9 +262,8 @@ class UserDetailsScreen extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.only(right: 5.0),
-                            width: 60.0,
-                            height: 40.0,
+                            width: 55.0,
+                            height: 35.0,
                             child: MaterialButton(
                               color: Colors.blue,
                               textColor: Colors.white,

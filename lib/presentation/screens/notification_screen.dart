@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_health_v2/constants/constants.dart';
 import 'package:smart_health_v2/domain/auth/auth_service.dart';
@@ -11,13 +12,15 @@ import 'package:smart_health_v2/models/notification.dart' as notification;
 import 'package:smart_health_v2/presentation/screens/notification_details_screen.dart';
 
 class NotificationScreen extends StatefulWidget {
-  const NotificationScreen({Key? key}) : super(key: key);
+  const NotificationScreen();
 
   @override
   _NotificationScreenState createState() => _NotificationScreenState();
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
+  _NotificationScreenState();
+
   @override
   Widget build(BuildContext context) {
     List<notification.Notification> notifications = [];
@@ -26,6 +29,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
     return Scaffold(
       backgroundColor: kBackgroundColor,
+      floatingActionButton: _buildTestFloatingActionButton(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -83,23 +87,23 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget _buildListItem(BuildContext context, int index,
       notification.Notification notification, Database db) {
     final String heroTag = "notification_${index.toString()}";
+
     return GestureDetector(
       onTap: () {
-        db.notificationsCollection
-            .updateNotificationStatus(notification.id!)
-            .then(
-          (_) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => NotificationDetailsScreen(notification),
-              ),
-            );
-          },
-        ).catchError((_) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("Unable to update status of notification")));
-        });
+        if (notification.status == 'new') {
+          db.notificationsCollection
+              .updateNotificationStatus(notification.id!, 'seen')
+              .then(
+            (_) {
+              _openNotificationDetailsPage(notification);
+            },
+          ).catchError((_) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("Unable to update status of notification")));
+          });
+        } else {
+          _openNotificationDetailsPage(notification);
+        }
       },
       child: Card(
         shape:
@@ -134,6 +138,60 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void _openNotificationDetailsPage(notification.Notification notification) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NotificationDetailsScreen(
+          notificationId: notification.id!,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTestFloatingActionButton() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        FloatingActionButton(
+          child: Icon(FontAwesomeIcons.plus),
+          backgroundColor: Colors.red,
+          onPressed: () {
+            FirebaseFirestore.instance.collection('notifications').add(
+              {
+                'eRecept': {'Aspirin 500mg': 2, 'Probiotic': 1},
+                'status': 'new',
+                'time': Timestamp.now(),
+                'title': 'Izdat Vam je novi eRecept',
+                'body': 'Izdat Vam je novi recept od dr. Gorana:',
+                'type': 'recipe',
+                'userEmail': "12345678901@something.coms"
+              },
+            );
+          },
+        ),
+        SizedBox(height: 20.0),
+        FloatingActionButton(
+          child: Icon(FontAwesomeIcons.plus),
+          backgroundColor: Colors.blue,
+          onPressed: () {
+            FirebaseFirestore.instance.collection('notifications').add(
+              {
+                'status': 'new',
+                'time': Timestamp.now(),
+                'title': 'Uspešno zakazan pregled',
+                'body':
+                    'Vas pregled kod dr.Gorana zakazan je za 10.11.2021 u 15:00!',
+                'type': 'information',
+                'userEmail': "12345678901@something.coms"
+              },
+            );
+          },
+        )
+      ],
     );
   }
 }
